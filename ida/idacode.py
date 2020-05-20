@@ -3,10 +3,12 @@ import threading
 import inspect
 import sys
 import idaapi
+import debugpy
 
 from idacode_utils.safe_idaapi import SafeIDAAPI
 from idacode_utils.safe_idautils import SafeIDAUtils
 from idacode_utils.safe_idc import SafeIDC
+import idacode_utils.dbg as dbg
 
 HOST = "127.0.0.1"
 PORT = 10100
@@ -29,9 +31,13 @@ def start_server():
                 "idaapi": SafeIDAAPI(),
                 "idc": SafeIDC(),
                 "idautils": SafeIDAUtils(),
+                "dbg": dbg,
                 "idacode": True
             }
+            old = sys.executable
+            sys.executable = "C:\\Python37\\python37.exe"
             idaapi.IDAPython_ExecScript(script, vars)
+            sys.executable = old
 
 class VSCodeServer(idaapi.plugin_t):
     def __init__(self):
