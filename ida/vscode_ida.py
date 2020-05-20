@@ -1,5 +1,7 @@
 import socket
 import threading
+import inspect
+import sys
 """from gevent import monkey, sleep, socket
 monkey.patch_all(thread=False)
 from gevent.server import StreamServer"""
@@ -42,17 +44,38 @@ class SafeIDAAPI(object):
 
         if hasattr(idaapi, name):
             value = getattr(idaapi, name)
+        else:
+            raise AttributeError(name)
+        
+        """
+        inspect.isgeneratorfunction(object)
+        Return True if the object is a Python generator function.
+
+        Changed in version 3.8: Functions wrapped in functools.partial() now return True if the wrapped function is a Python generator function.
+
+        inspect.isgenerator(object)
+        Return True if the object is a generator.
+        """
 
         if hasattr(value, "__call__"):
             def call(*args, **kwargs):
-                holder = [ None ]
+                last_exception = [ None ] # works with array??
 
-                def trampoline():
-                    holder[0] = value(*args, **kwargs)
-                    return 1
+                def call_handler():
+                    try:
+                        return value(*args, **kwargs)
+                    except:
+                        _, exception, _ = sys.exc_info()
+                        last_exception[0] = exception
+                        return -1 # maybe return something unique?
 
-                idaapi.execute_sync(trampoline, idaapi.MFF_WRITE)
-                return holder[0]
+                return_value = idaapi.execute_sync(
+                    call_handler,
+                    idaapi.MFF_WRITE
+                )
+                
+                if return_value == -1 and last_exception[0] != None:
+                    print(f"Error: {last_exception[0]}")
 
             return call
         else:
