@@ -29,7 +29,7 @@ def start_server():
                 "idaapi": SafeIDAAPI(),
                 "idc": SafeIDC(),
                 "idautils": SafeIDAUtils(),
-                "codeida": True
+                "idacode": True
             }
             idaapi.IDAPython_ExecScript(script, vars)
 
