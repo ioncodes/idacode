@@ -22,30 +22,11 @@ class SafeIDC(object):
 
         if hasattr(idc, name):
             value = getattr(idc, name)
-
-        if hasattr(value, "__call__"):
-            def call(*args, **kwargs):
-                holder = [ None ]
-
-                def trampoline():
-                    holder[0] = value(*args, **kwargs)
-                    return 1
-
-                idaapi.execute_sync(trampoline, idaapi.MFF_WRITE)
-                return holder[0]
-
-            return call
-        else:
-            return value
-
-class SafeIDAAPI(object):
-    def __getattribute__(self, name):
-        value = None
-
-        if hasattr(idaapi, name):
-            value = getattr(idaapi, name)
         else:
             raise AttributeError(name)
+
+        print(name)
+        print(value)
         
         """
         inspect.isgeneratorfunction(object)
@@ -60,22 +41,76 @@ class SafeIDAAPI(object):
         if hasattr(value, "__call__"):
             def call(*args, **kwargs):
                 last_exception = [ None ] # works with array??
+                last_return = [ None ]
 
                 def call_handler():
                     try:
-                        return value(*args, **kwargs)
+                        last_return[0] = value(*args, **kwargs)
+                        return True
                     except:
                         _, exception, _ = sys.exc_info()
                         last_exception[0] = exception
-                        return -1 # maybe return something unique?
+                        return False # maybe return something unique?
 
                 return_value = idaapi.execute_sync(
                     call_handler,
                     idaapi.MFF_WRITE
                 )
                 
-                if return_value == -1 and last_exception[0] != None:
+                if return_value == False and last_exception[0] != None:
                     print(f"Error: {last_exception[0]}")
+
+                return last_return[0]
+
+            return call
+        else:
+            return value
+
+class SafeIDAAPI(object):
+    def __getattribute__(self, name):
+        value = None
+
+        if hasattr(idaapi, name):
+            value = getattr(idaapi, name)
+        else:
+            raise AttributeError(name)
+
+        print(name)
+        print(value)
+        
+        """
+        inspect.isgeneratorfunction(object)
+        Return True if the object is a Python generator function.
+
+        Changed in version 3.8: Functions wrapped in functools.partial() now return True if the wrapped function is a Python generator function.
+
+        inspect.isgenerator(object)
+        Return True if the object is a generator.
+        """
+
+        if hasattr(value, "__call__"):
+            def call(*args, **kwargs):
+                last_exception = [ None ] # works with array??
+                last_return = [ None ]
+
+                def call_handler():
+                    try:
+                        last_return[0] = value(*args, **kwargs) # handler only expects true/false??
+                        return True
+                    except:
+                        _, exception, _ = sys.exc_info()
+                        last_exception[0] = exception
+                        return False # maybe return something unique?
+
+                return_value = idaapi.execute_sync(
+                    call_handler,
+                    idaapi.MFF_WRITE
+                )
+                
+                if return_value == False and last_exception[0] != None:
+                    print(f"Error: {last_exception[0]}")
+
+                return last_return[0]
 
             return call
         else:
