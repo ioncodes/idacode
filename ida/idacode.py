@@ -39,7 +39,9 @@ def start_server():
             new_cwd = os.path.dirname(script)
             old_cwd = os.getcwd()
             os.chdir(new_cwd)
+            # TODO: try wrapping IDAPython_ExecScript in a safe handler instead
             idaapi.IDAPython_ExecScript(script, vars)
+            print("hi")
             os.chdir(old_cwd)
             sys.executable = old
 
