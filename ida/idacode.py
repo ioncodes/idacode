@@ -2,8 +2,8 @@ import socket
 import threading
 import inspect
 import sys
+import os
 import idaapi
-import debugpy
 
 from idacode_utils.safe_idaapi import SafeIDAAPI
 from idacode_utils.safe_idautils import SafeIDAUtils
@@ -36,7 +36,11 @@ def start_server():
             }
             old = sys.executable
             sys.executable = "C:\\Python37\\python37.exe"
+            new_cwd = os.path.dirname(script)
+            old_cwd = os.getcwd()
+            os.chdir(new_cwd)
             idaapi.IDAPython_ExecScript(script, vars)
+            os.chdir(old_cwd)
             sys.executable = old
 
 class VSCodeServer(idaapi.plugin_t):
