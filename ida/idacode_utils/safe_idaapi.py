@@ -1,5 +1,6 @@
 import idaapi
 import sys
+import inspect
 from .utils import safe_iteration
 
 class SafeIDAAPI(object):
@@ -33,8 +34,7 @@ class SafeIDAAPI(object):
                 if return_value == False and call.last_exception != None:
                     print(f"Error: {call.last_exception}")
 
-                if hasattr(call.last_return, "__iter__"):
-                    # inspect.isgenerator(object)
+                if inspect.isgenerator(call.last_return):
                     call.last_return = safe_iteration(call.last_return)
 
                 return call.last_return
