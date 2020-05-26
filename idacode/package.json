@@ -3,6 +3,7 @@
 	"displayName": "IDACode",
 	"description": "Run your IDA scripts from VSCode",
 	"version": "0.0.1",
+	"publisher": "Layle",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.45.0"
