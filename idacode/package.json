@@ -10,6 +10,9 @@
 	"categories": [
 		"Other"
 	],
+	"keywords": [
+		"ida", "reversing", "idapy", "idapython"
+	],
 	"activationEvents": [
 		"onCommand:idacode.executeScript"
 	],
