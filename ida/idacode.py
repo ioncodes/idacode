@@ -12,6 +12,7 @@ import idacode_utils.dbg as dbg
 
 HOST = "127.0.0.1"
 PORT = 10100
+PYTHON = "C:\\Python37\\python37.exe"
 
 def start_server():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,7 +36,7 @@ def start_server():
                 "idacode": True
             }
             old = sys.executable
-            sys.executable = "C:\\Python37\\python37.exe"
+            sys.executable = PYTHON
             new_cwd = os.path.dirname(script)
             old_cwd = os.getcwd()
             os.chdir(new_cwd)

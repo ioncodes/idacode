@@ -19,7 +19,28 @@
 				"command": "idacode.executeScript",
 				"title": "Execute in IDA"
 			}
-		]
+		],
+		"configuration": {
+            "type": "object",
+            "title": "IDACode",
+            "properties": {
+				"IDACode.host": {
+					"type": "string",
+					"default": "127.0.0.1",
+					"description": "The host running IDA."
+				},
+				"IDACode.port": {
+					"type": "integer",
+					"default": 10100,
+					"description": "The port IDA is listening on."
+				},
+                "IDACode.python": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Path to the Python 3 executable."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
