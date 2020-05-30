@@ -10,10 +10,16 @@ export function activate(context: vscode.ExtensionContext) {
 		const port = config.get('port') as number;
 
 		if (scriptPath !== undefined) {
-			let client = new net.Socket();
+			const name = path.parse(scriptPath).base;
+			const client = new net.Socket();
+			
+			client.on('error', _ => {
+				vscode.window.showErrorMessage(`Failed sending ${name} to IDA`);
+			});
+
 			client.connect(port, host, () => {
 				client.write(scriptPath);
-				vscode.window.showInformationMessage(`Sent ${path.parse(scriptPath).base} to IDA`);
+				vscode.window.showInformationMessage(`Sent ${name} to IDA`);
 			});
 		}
 	});
