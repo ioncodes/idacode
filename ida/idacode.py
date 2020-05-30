@@ -41,7 +41,16 @@ def start_server():
             old_cwd = os.getcwd()
             os.chdir(new_cwd)
             # TODO: try wrapping IDAPython_ExecScript in a safe handler instead
-            # TODO: try attaching debugger through the plugin -> doesn't work
+            # TODO: try attaching debugger through the plugin
+            """
+            when importing debugpy it has to be made sure that it's being imported
+            in the directory of the to be runned script
+            if thats not the case it will not be able to attach and trigger
+            the old error. apply same os.chdir logic
+            to do this we must be able to work with events on the socket that
+            tells whether it requires debug support or not (maybe another solution?)
+            we can also monkeypatch debugpy probably?
+            """
             idaapi.IDAPython_ExecScript(script, vars)
             os.chdir(old_cwd)
             sys.executable = old
