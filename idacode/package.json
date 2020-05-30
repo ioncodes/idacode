@@ -1,71 +1,66 @@
 {
-	"name": "idacode",
-	"displayName": "IDACode",
-	"description": "Run your IDA scripts from VSCode",
-	"version": "0.0.1",
-	"publisher": "Layle",
-	"preview": true,
-	"engines": {
-		"vscode": "^1.45.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"keywords": [
-		"ida", "reversing", "idapy", "idapython"
-	],
-	"activationEvents": [
-		"onCommand:idacode.executeScript"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "idacode.executeScript",
-				"title": "Execute in IDA"
-			}
-		],
-		"configuration": {
+    "name": "idacode",
+    "displayName": "IDACode",
+    "description": "Run your IDA scripts from VSCode",
+    "version": "0.0.1",
+    "publisher": "Layle",
+    "preview": true,
+    "engines": {
+        "vscode": "^1.45.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "ida", "reversing", "idapy", "idapython"
+    ],
+    "activationEvents": [
+        "onCommand:idacode.executeScript"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "idacode.executeScript",
+                "title": "Execute in IDA"
+            }
+        ],
+        "configuration": {
             "type": "object",
             "title": "IDACode",
             "properties": {
-				"IDACode.host": {
-					"type": "string",
-					"default": "127.0.0.1",
-					"description": "The host running IDA."
-				},
-				"IDACode.port": {
-					"type": "integer",
-					"default": 10100,
-					"description": "The port IDA is listening on."
-				},
-                "IDACode.python": {
+                "IDACode.host": {
                     "type": "string",
-                    "default": "",
-                    "description": "Path to the Python 3 executable."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.45.0",
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.11.0",
-		"eslint": "^6.8.0",
-		"@typescript-eslint/parser": "^2.30.0",
-		"@typescript-eslint/eslint-plugin": "^2.30.0",
-		"glob": "^7.1.6",
-		"mocha": "^7.1.2",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
-	}
+                    "default": "127.0.0.1",
+                    "description": "The host running IDA."
+                },
+                "IDACode.port": {
+                    "type": "integer",
+                    "default": 10100,
+                    "description": "The port IDA is listening on."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "eslint src --ext ts",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.45.0",
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^13.11.0",
+        "eslint": "^6.8.0",
+        "@typescript-eslint/parser": "^2.30.0",
+        "@typescript-eslint/eslint-plugin": "^2.30.0",
+        "glob": "^7.1.6",
+        "mocha": "^7.1.2",
+        "typescript": "^3.8.3",
+        "vscode-test": "^1.3.0"
+    }
 }
