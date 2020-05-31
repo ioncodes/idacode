@@ -36,7 +36,7 @@
                 },
                 "IDACode.port": {
                     "type": "integer",
-                    "default": 10100,
+                    "default": 7065,
                     "description": "The port IDA is listening on."
                 }
             }

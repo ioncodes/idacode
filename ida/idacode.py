@@ -4,6 +4,7 @@ import inspect
 import sys
 import os
 import idaapi
+import debugpy
 
 from idacode_utils.safe_idaapi import SafeIDAAPI
 from idacode_utils.safe_idautils import SafeIDAUtils
@@ -11,10 +12,24 @@ from idacode_utils.safe_idc import SafeIDC
 import idacode_utils.dbg as dbg
 
 HOST = "127.0.0.1"
-PORT = 10100
+PORT = 7065
 PYTHON = "C:\\Python37\\python37.exe"
 
+getcwd_original = os.getcwd
+script_folder = ""
+
+def getcwd_hook():
+    cwd = getcwd_original()
+    global script_folder
+    if cwd.lower() in script_folder.lower() and script_folder.lower() != cwd.lower():
+        cwd = script_folder
+    return cwd
+
 def start_server():
+    os.getcwd = getcwd_hook
+    sys.executable = PYTHON
+    debugpy.listen(7066)
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((HOST, PORT))
     sock.listen(5)
@@ -35,25 +50,10 @@ def start_server():
                 "dbg": dbg,
                 "idacode": True
             }
-            old = sys.executable
-            sys.executable = PYTHON
-            new_cwd = os.path.dirname(script)
-            old_cwd = os.getcwd()
-            os.chdir(new_cwd)
             # TODO: try wrapping IDAPython_ExecScript in a safe handler instead
-            # TODO: try attaching debugger through the plugin
-            """
-            when importing debugpy it has to be made sure that it's being imported
-            in the directory of the to be runned script
-            if thats not the case it will not be able to attach and trigger
-            the old error. apply same os.chdir logic
-            to do this we must be able to work with events on the socket that
-            tells whether it requires debug support or not (maybe another solution?)
-            we can also monkeypatch debugpy probably?
-            """
+            global script_folder
+            script_folder = os.path.dirname(script)
             idaapi.IDAPython_ExecScript(script, vars)
-            os.chdir(old_cwd)
-            sys.executable = old
 
 class VSCodeServer(idaapi.plugin_t):
     def __init__(self):
