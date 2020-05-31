@@ -6,13 +6,7 @@ import os
 import idaapi
 import debugpy
 
-from idacode_utils.safe_idaapi import SafeIDAAPI
-from idacode_utils.safe_idautils import SafeIDAUtils
-from idacode_utils.safe_ida_bytes import SafeIDABytes
-from idacode_utils.safe_idc import SafeIDC
 import idacode_utils.dbg as dbg
-
-# TODO: before executing script travers modules and load dependencies?
 
 HOST = "127.0.0.1"
 PORT = 7065
@@ -46,10 +40,6 @@ def start_socket_server():
 
 def create_env():
     return {
-        "idaapi": SafeIDAAPI(),
-        "idc": SafeIDC(),
-        "idautils": SafeIDAUtils(),
-        "ida_bytes": SafeIDABytes(),
         "dbg": dbg,
         "idacode": True
     }
@@ -60,10 +50,12 @@ def handle_connection(script):
     if script and len(script) > 0:
         script = script.decode("utf8")
         script_folder = os.path.dirname(script)
-        env = create_env()
+        env = create_env() # probably don't really need this anymore
         print(f"Executing {script}")
-        # TODO: try wrapping IDAPython_ExecScript in a safe handler instead
-        idaapi.IDAPython_ExecScript(script, env)
+        idaapi.execute_sync(
+            lambda: idaapi.IDAPython_ExecScript(script, env),
+            idaapi.MFF_WRITE
+        )
 
 def start_server():
     setup_patches()
