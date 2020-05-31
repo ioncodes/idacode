@@ -24,8 +24,9 @@ getcwd_original = os.getcwd
 script_folder = ""
 
 def getcwd_hook():
-    cwd = getcwd_original()
     global script_folder
+
+    cwd = getcwd_original()
     if cwd.lower() in script_folder.lower() and script_folder.lower() != cwd.lower():
         cwd = script_folder
     return cwd
@@ -60,6 +61,7 @@ def handle_connection(script):
         script_folder = os.path.dirname(script)
         env = create_env()
         print(f"Executing {script}")
+        
         idaapi.execute_sync(
             lambda: idaapi.IDAPython_ExecScript(script, env),
             idaapi.MFF_WRITE
