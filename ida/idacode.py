@@ -8,8 +8,11 @@ import debugpy
 
 from idacode_utils.safe_idaapi import SafeIDAAPI
 from idacode_utils.safe_idautils import SafeIDAUtils
+from idacode_utils.safe_ida_bytes import SafeIDABytes
 from idacode_utils.safe_idc import SafeIDC
 import idacode_utils.dbg as dbg
+
+# TODO: before executing script travers modules and load dependencies?
 
 HOST = "127.0.0.1"
 PORT = 7065
@@ -46,6 +49,7 @@ def create_env():
         "idaapi": SafeIDAAPI(),
         "idc": SafeIDC(),
         "idautils": SafeIDAUtils(),
+        "ida_bytes": SafeIDABytes(),
         "dbg": dbg,
         "idacode": True
     }
