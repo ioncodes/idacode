@@ -31,7 +31,7 @@ def setup_patches():
     sys.executable = PYTHON
 
 def start_debug_server():
-    debugpy.listen(DEBUG_PORT)
+    debugpy.listen((HOST, DEBUG_PORT))
     print(f"IDACode debug server listening on {HOST}:{DEBUG_PORT}")
 
 def start_socket_server():
