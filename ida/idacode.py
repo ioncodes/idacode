@@ -1,12 +1,9 @@
-import socket
-import threading
-import inspect
-import sys
-import os
+import socket, sys, os, threading, inspect, asyncio
+import debugpy, tornado
 import idaapi
-import debugpy
-
 import idacode_utils.dbg as dbg
+import idacode_utils.hooks as hooks
+from idacode_utils.socket_handler import SocketHandler
 
 """
 TODO:
@@ -20,65 +17,28 @@ PORT = 7065
 DEBUG_PORT = 7066
 PYTHON = "C:\\Python37\\python37.exe"
 
-getcwd_original = os.getcwd
-script_folder = ""
-
-def getcwd_hook():
-    global script_folder
-
-    cwd = getcwd_original()
-    if cwd.lower() in script_folder.lower() and script_folder.lower() != cwd.lower():
-        cwd = script_folder
-    return cwd
-
 def setup_patches():
-    os.getcwd = getcwd_hook
+    hooks.install()
     sys.executable = PYTHON
 
 def start_debug_server():
     debugpy.listen((HOST, DEBUG_PORT))
     print(f"IDACode debug server listening on {HOST}:{DEBUG_PORT}")
 
-def start_socket_server():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind((HOST, PORT))
-    sock.listen(5)
+def create_socket_handler():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    app = tornado.web.Application([
+        (r"/ws", SocketHandler),
+    ])
+    server = tornado.httpserver.HTTPServer(app)
     print(f"IDACode listening on {HOST}:{PORT}")
-    return sock
-
-def create_env():
-    return {
-        "dbg": dbg,
-        "breakpoint": dbg.bp,
-        "idacode": True
-    }
-
-def handle_connection(script):
-    global script_folder
-    
-    if script and len(script) > 0:
-        script = script.decode("utf8")
-        script_folder = os.path.dirname(script)
-        env = create_env()
-        print(f"Executing {script}")
-        
-        idaapi.execute_sync(
-            lambda: idaapi.IDAPython_ExecScript(script, env),
-            idaapi.MFF_WRITE
-        )
+    server.listen(address=HOST, port=PORT)
 
 def start_server():
     setup_patches()
-    sock = start_socket_server()
+    create_socket_handler()
     start_debug_server()
-
-    while True:
-        io, _ = sock.accept()
-        data = io.recv(256) # MAX_PATH
-        io.close()
-
-        handle_connection(data)
-
+    tornado.ioloop.IOLoop.instance().start()
 
 class IDACode(idaapi.plugin_t):
     def __init__(self):
