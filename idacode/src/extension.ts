@@ -1,30 +1,44 @@
 import * as vscode from 'vscode';
 import * as net from 'net';
 import * as path from 'path';
+import * as WebSocket from 'ws';
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('idacode.executeScript', () => {
-        const scriptPath = vscode.window.activeTextEditor?.document.uri.fsPath as string;
-        const config = vscode.workspace.getConfiguration('IDACode');
-        const host = config.get('host') as string;
-        const port = config.get('port') as number;
+var socket: WebSocket;
 
-        if (scriptPath !== undefined) {
-            const name = path.parse(scriptPath).base;
-            const client = new net.Socket();
-            
-            client.on('error', _ => {
-                vscode.window.showErrorMessage(`Failed sending ${name} to IDA`);
-            });
+function getConfig<T>(name: string) {
+    const config = vscode.workspace.getConfiguration('IDACode');
+    return config.get(name) as T;
+}
 
-            client.connect(port, host, () => {
-                client.write(scriptPath);
-                vscode.window.showInformationMessage(`Sent ${name} to IDA`);
-            });
-        }
+function executeScript() {
+    const scriptPath = vscode.window.activeTextEditor?.document.uri.fsPath as string;
+    
+    if (scriptPath !== undefined) {
+        const name = path.parse(scriptPath).base;
+        socket.send(scriptPath);
+        vscode.window.showInformationMessage(`Sent ${name} to IDA`);
+    }
+}
+
+function connectToIDA() {
+    const host = getConfig<string>('host');
+    const port = getConfig<number>('port');
+
+    socket = new WebSocket(`ws://${host}:${port}/ws`);
+
+    socket.on('open', () => {
+        socket.send('something');
     });
+}
 
-    context.subscriptions.push(disposable);
+export function activate(context: vscode.ExtensionContext) {    
+    let commands = [];
+    commands.push(vscode.commands.registerCommand('idacode.executeScript', executeScript));
+    commands.push(vscode.commands.registerCommand('idacode.connectToIDA', connectToIDA));
+    
+    for(let command of commands) {
+        context.subscriptions.push(command);
+    }
 }
 
 export function deactivate() {}

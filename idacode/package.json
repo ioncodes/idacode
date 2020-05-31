@@ -12,14 +12,22 @@
         "Other"
     ],
     "keywords": [
-        "ida", "reversing", "idapy", "idapython"
+        "ida",
+        "reversing",
+        "idapy",
+        "idapython"
     ],
     "activationEvents": [
+        "onCommand:idacode.connectToIDA",
         "onCommand:idacode.executeScript"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
+            {
+                "command": "idacode.connectToIDA",
+                "title": "Connect to IDA"
+            },
             {
                 "command": "idacode.executeScript",
                 "title": "Execute in IDA"
@@ -62,5 +70,9 @@
         "mocha": "^7.1.2",
         "typescript": "^3.8.3",
         "vscode-test": "^1.3.0"
+    },
+    "dependencies": {
+        "@types/ws": "^7.2.4",
+        "ws": "^7.3.0"
     }
 }
