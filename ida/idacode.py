@@ -70,7 +70,7 @@ def start_server():
         handle_connection(data)
 
 
-class VSCodeServer(idaapi.plugin_t):
+class IDACode(idaapi.plugin_t):
     def __init__(self):
         self.flags = idaapi.PLUGIN_UNL
         self.comment = "IDACode"
@@ -90,4 +90,4 @@ class VSCodeServer(idaapi.plugin_t):
         pass
 
 def PLUGIN_ENTRY():
-    return VSCodeServer()
+    return IDACode()
