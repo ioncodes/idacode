@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import * as net from 'net';
 import * as path from 'path';
 import * as WebSocket from 'ws';
+import './extensions';
 
 var socket: WebSocket;
 
-function getConfig<T>(name: string) {
+function getConfig<T>(name: string): T {
     const config = vscode.workspace.getConfiguration('IDACode');
     return config.get(name) as T;
 }
@@ -27,7 +27,9 @@ function connectToIDA() {
     socket = new WebSocket(`ws://${host}:${port}/ws`);
 
     socket.on('open', () => {
-        socket.send('something');
+        socket.send({
+            event: 'set_workspace'
+        }.toBuffer());
     });
 }
 
