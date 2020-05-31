@@ -8,6 +8,13 @@ import debugpy
 
 import idacode_utils.dbg as dbg
 
+"""
+TODO:
+* Implement event system
+  -> VS Code send enable to IDA with workspace 
+     path so debugger can launch accordingly
+"""
+
 HOST = "127.0.0.1"
 PORT = 7065
 DEBUG_PORT = 7066
@@ -41,6 +48,7 @@ def start_socket_server():
 def create_env():
     return {
         "dbg": dbg,
+        "breakpoint": dbg.bp,
         "idacode": True
     }
 
@@ -50,7 +58,7 @@ def handle_connection(script):
     if script and len(script) > 0:
         script = script.decode("utf8")
         script_folder = os.path.dirname(script)
-        env = create_env() # probably don't really need this anymore
+        env = create_env()
         print(f"Executing {script}")
         idaapi.execute_sync(
             lambda: idaapi.IDAPython_ExecScript(script, env),
