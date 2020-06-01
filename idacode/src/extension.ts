@@ -26,46 +26,49 @@ function executeScript() {
 }
 
 function connectToIDA() {
-    const host = getConfig<string>('host');
-    const port = getConfig<number>('port');
+    return new Promise((resolve, reject) => {
+        const host = getConfig<string>('host');
+        const port = getConfig<number>('port');
 
-    socket = new WebSocket(`ws://${host}:${port}/ws`);
+        socket = new WebSocket(`ws://${host}:${port}/ws`);
 
-    socket.on('open', async () => {
-        const currentDocument = getCurrentDocument();
-        const currentFolder = path.parse(currentDocument).dir;
-        const workspaceFolder = await vscode.window.showInputBox({
-            prompt: 'Enter the path to the folder containing the script',
-            value: currentFolder
-        });
-        socket.send({
-            event: Event.SetWorkspace,
-            path: workspaceFolder
-        }.toBuffer());
-        vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
-    });
-
-    socket.on('message', async (data) => {
-        const message = JSON.parse(data.toString());
-
-        if(message.event === Event.DebuggerReady) {
-            const host = getConfig<string>('host');
-            const debugPort = getConfig<number>('debug.port');
-
-            vscode.debug.startDebugging(undefined, {
-                name: 'Python: Remote Attach',
-                type: 'python',
-                request: 'attach',
-                port: debugPort,
-                host: host,
-                pathMappings: [
-                    {
-                        localRoot: '${workspaceFolder}',
-                        remoteRoot: '.'
-                    }
-                ]
+        socket.on('open', async () => {
+            const currentDocument = getCurrentDocument();
+            const currentFolder = path.parse(currentDocument).dir;
+            const workspaceFolder = await vscode.window.showInputBox({
+                prompt: 'Enter the path to the folder containing the script',
+                value: currentFolder
             });
-        }
+            socket.send({
+                event: Event.SetWorkspace,
+                path: workspaceFolder
+            }.toBuffer());
+            vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
+            resolve();
+        });
+
+        socket.on('message', data => {
+            const message = JSON.parse(data.toString());
+
+            if(message.event === Event.DebuggerReady) {
+                const host = getConfig<string>('host');
+                const debugPort = getConfig<number>('debug.port');
+
+                vscode.debug.startDebugging(undefined, {
+                    name: 'Python: Remote Attach',
+                    type: 'python',
+                    request: 'attach',
+                    port: debugPort,
+                    host: host,
+                    pathMappings: [
+                        {
+                            localRoot: '${workspaceFolder}',
+                            remoteRoot: '.'
+                        }
+                    ]
+                });
+            }
+        });
     });
 }
 
@@ -75,11 +78,16 @@ function attachToIDA() {
     }.toBuffer());
 }
 
+function connectAndAttachToIDA() {
+    connectToIDA().then(attachToIDA);
+}
+
 export function activate(context: vscode.ExtensionContext) {    
     let commands = [];
     commands.push(vscode.commands.registerCommand('idacode.executeScript', executeScript));
     commands.push(vscode.commands.registerCommand('idacode.connectToIDA', connectToIDA));
     commands.push(vscode.commands.registerCommand('idacode.attachToIDA', attachToIDA));
+    commands.push(vscode.commands.registerCommand('idacode.connectAndAttachToIDA', connectAndAttachToIDA));
     
     for(let command of commands) {
         context.subscriptions.push(command);

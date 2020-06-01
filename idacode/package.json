@@ -20,6 +20,7 @@
     "activationEvents": [
         "onCommand:idacode.connectToIDA",
         "onCommand:idacode.attachToIDA",
+        "onCommand:idacode.connectAndAttachToIDA",
         "onCommand:idacode.executeScript"
     ],
     "main": "./out/extension.js",
@@ -31,11 +32,15 @@
             },
             {
                 "command": "idacode.attachToIDA",
-                "title": "Attach to IDA"
+                "title": "Attach a debugger to IDA"
+            },
+            {
+                "command": "idacode.connectAndAttachToIDA",
+                "title": "Connect and attach a debugger to IDA"
             },
             {
                 "command": "idacode.executeScript",
-                "title": "Execute in IDA"
+                "title": "Execute script in IDA"
             }
         ],
         "configuration": {
