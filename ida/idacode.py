@@ -6,13 +6,6 @@ import idacode_utils.hooks as hooks
 import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
-"""
-TODO:
-* Implement event system
-  -> VS Code send enable to IDA with workspace 
-     path so debugger can launch accordingly
-"""
-
 def setup_patches():
     hooks.install()
     sys.executable = settings.PYTHON
