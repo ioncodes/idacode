@@ -44,12 +44,42 @@ function connectToIDA() {
         }.toBuffer());
         vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
     });
+
+    socket.on('message', async (data) => {
+        const message = JSON.parse(data.toString());
+
+        if(message.event === Event.DebuggerReady) {
+            const host = getConfig<string>('host');
+            const debugPort = getConfig<number>('debug.port');
+
+            vscode.debug.startDebugging(undefined, {
+                name: 'Python: Remote Attach',
+                type: 'python',
+                request: 'attach',
+                port: debugPort,
+                host: host,
+                pathMappings: [
+                    {
+                        localRoot: '${workspaceFolder}',
+                        remoteRoot: '.'
+                    }
+                ]
+            });
+        }
+    });
+}
+
+function attachToIDA() {
+    socket.send({
+        event: Event.AttachDebugger
+    }.toBuffer());
 }
 
 export function activate(context: vscode.ExtensionContext) {    
     let commands = [];
     commands.push(vscode.commands.registerCommand('idacode.executeScript', executeScript));
     commands.push(vscode.commands.registerCommand('idacode.connectToIDA', connectToIDA));
+    commands.push(vscode.commands.registerCommand('idacode.attachToIDA', attachToIDA));
     
     for(let command of commands) {
         context.subscriptions.push(command);

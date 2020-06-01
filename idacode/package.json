@@ -19,6 +19,7 @@
     ],
     "activationEvents": [
         "onCommand:idacode.connectToIDA",
+        "onCommand:idacode.attachToIDA",
         "onCommand:idacode.executeScript"
     ],
     "main": "./out/extension.js",
@@ -27,6 +28,10 @@
             {
                 "command": "idacode.connectToIDA",
                 "title": "Connect to IDA"
+            },
+            {
+                "command": "idacode.attachToIDA",
+                "title": "Attach to IDA"
             },
             {
                 "command": "idacode.executeScript",
@@ -46,6 +51,11 @@
                     "type": "integer",
                     "default": 7065,
                     "description": "The port IDA is listening on."
+                },
+                "IDACode.debug.port": {
+                    "type": "integer",
+                    "default": 7066,
+                    "description": "The port the IDA debug server is listening on."
                 }
             }
         }

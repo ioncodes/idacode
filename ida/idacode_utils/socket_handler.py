@@ -18,7 +18,7 @@ def start_debug_server():
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        print("WebSocket opened")
+        print("IDACode client connected")
 
     def on_message(self, message):
         message = json.loads(message.decode("utf8"))
@@ -26,7 +26,12 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         if message["event"] == "set_workspace":
             path = message["path"]
             hooks.set_script_folder(path)
+            print(f"Set workspace folder to {path}")
+        elif message["event"] == "attach_debugger":
             start_debug_server()
+            self.write_message({
+                "event": "debugger_ready"
+            })
         elif message["event"] == "execute_script":
             script = message["path"]
             env = create_env()
@@ -39,4 +44,4 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             print(f"Invalid event {message['event']}")
 
     def on_close(self):
-        print("WebSocket closed")
+        print("IDACode client disconnected")
