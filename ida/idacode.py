@@ -22,7 +22,7 @@ def create_socket_handler():
 def start_server():
     setup_patches()
     create_socket_handler()
-    tornado.ioloop.IOLoop.instance().start()
+    tornado.ioloop.IOLoop.current().start()
 
 class IDACode(idaapi.plugin_t):
     def __init__(self):
