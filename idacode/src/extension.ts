@@ -18,7 +18,10 @@ function getCurrentDocument(): string {
 function executeScript() {
     const currentDocument = getCurrentDocument();
     const name = path.parse(currentDocument).base;
-    socket.send(currentDocument);
+    socket.send({
+        event: Event.ExecuteScript,
+        path: currentDocument
+    }.toBuffer());
     vscode.window.showInformationMessage(`Sent ${name} to IDA`);
 }
 
@@ -37,7 +40,7 @@ function connectToIDA() {
         });
         socket.send({
             event: Event.SetWorkspace,
-            folder: workspaceFolder
+            path: workspaceFolder
         }.toBuffer());
         vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
     });

@@ -1,8 +1,9 @@
-import tornado.websocket
-import os
+import tornado.websocket, debugpy
+import os, json
 import idaapi
 import idacode_utils.dbg as dbg
 import idacode_utils.hooks as hooks
+import idacode_utils.settings as settings
 
 def create_env():
     return {
@@ -11,23 +12,31 @@ def create_env():
         "idacode": True
     }
 
+def start_debug_server():
+    debugpy.listen((settings.HOST, settings.DEBUG_PORT))
+    print(f"IDACode debug server listening on {settings.HOST}:{settings.DEBUG_PORT}")
+
 class SocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         print("WebSocket opened")
 
     def on_message(self, message):
-        print(message)
-        script = message.decode("utf8")
-        script_folder = os.path.dirname(script)
-        env = create_env()
-        hooks.set_script_folder(script_folder)
+        message = json.loads(message.decode("utf8"))
         
-        print(f"Executing {script}")
-        idaapi.execute_sync(
-            lambda: idaapi.IDAPython_ExecScript(script, env),
-            idaapi.MFF_WRITE
-        )
-        self.write_message(u"You said: " + message)
+        if message["event"] == "set_workspace":
+            path = message["path"]
+            hooks.set_script_folder(path)
+            start_debug_server()
+        elif message["event"] == "execute_script":
+            script = message["path"]
+            env = create_env()
+            print(f"Executing {script}")
+            idaapi.execute_sync(
+                lambda: idaapi.IDAPython_ExecScript(script, env),
+                idaapi.MFF_WRITE
+            )
+        else:
+            print(f"Invalid event {message['event']}")
 
     def on_close(self):
         print("WebSocket closed")
