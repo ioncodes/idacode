@@ -11,14 +11,15 @@ function getConfig<T>(name: string): T {
     return config.get(name) as T;
 }
 
+function getCurrentDocument(): string {
+    return vscode.window.activeTextEditor?.document.uri.fsPath as string;
+}
+
 function executeScript() {
-    const scriptPath = vscode.window.activeTextEditor?.document.uri.fsPath as string;
-    
-    if (scriptPath !== undefined) {
-        const name = path.parse(scriptPath).base;
-        socket.send(scriptPath);
-        vscode.window.showInformationMessage(`Sent ${name} to IDA`);
-    }
+    const currentDocument = getCurrentDocument();
+    const name = path.parse(currentDocument).base;
+    socket.send(currentDocument);
+    vscode.window.showInformationMessage(`Sent ${name} to IDA`);
 }
 
 function connectToIDA() {
@@ -27,10 +28,18 @@ function connectToIDA() {
 
     socket = new WebSocket(`ws://${host}:${port}/ws`);
 
-    socket.on('open', () => {
+    socket.on('open', async () => {
+        const currentDocument = getCurrentDocument();
+        const currentFolder = path.parse(currentDocument).dir;
+        const workspaceFolder = await vscode.window.showInputBox({
+            prompt: 'Enter the path to the folder containing the script',
+            value: currentFolder
+        });
         socket.send({
-            event: Event.SetWorkspace
+            event: Event.SetWorkspace,
+            folder: workspaceFolder
         }.toBuffer());
+        vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
     });
 }
 
