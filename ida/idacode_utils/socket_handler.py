@@ -1,5 +1,5 @@
 import tornado.websocket, debugpy
-import os, json
+import json
 import idaapi
 import idacode_utils.dbg as dbg
 import idacode_utils.hooks as hooks
