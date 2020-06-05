@@ -1,65 +1,36 @@
-# vscode-ida README
+# IDACode
 
-This is the README for your extension "vscode-ida". After writing up a brief description, we recommend including the following sections.
+IDACode faciliates the usage and development of IDAPython scripts. It features the execution of Python scripts in your IDA instance and a debugger that allows you to debug your scripts.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+IDACode supports the following main features:
 
-For example if there is an image subfolder under your extension project workspace:
+1. Script execution in IDAs environment
+2. Debugging scripts with VS Code's remote debugger
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![preview](/images/preview.gif)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+In order to use IDACode ensure that you have set all necessary information in IDACode's extension settings. For information on how to set up IDACode for IDA please refer to the [project repository](https://github.com/ioncodes/idacode).
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+IDACode requires the following settings to be set in order to function correctly:
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `IDACode.host`: the host address that is running IDA
+* `IDACode.port`: the port IDA is listening on
+* `IDACode.debug.port`: the debug port the IDAPython debugger is listening on
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+IDACode doesn't support host to VM communication unless the VM uses a shared volume that matches the workspace path set in VS Code when connecting to IDA.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.1.0
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Initial release
+- IDAPython remote execution
+- IDAPython debugger
