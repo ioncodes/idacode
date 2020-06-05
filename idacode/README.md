@@ -9,7 +9,7 @@ IDACode supports the following main features:
 1. Script execution in IDAs environment
 2. Debugging scripts with VS Code's remote debugger
 
-![preview](/images/preview.gif)
+![preview](images/preview.gif)
 
 ## Requirements
 
