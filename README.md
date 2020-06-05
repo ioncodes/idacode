@@ -1,1 +1,60 @@
-idacode
+# IDACode
+IDACode makes it easy to execute and debug Python 3 scripts in your IDA environment without leaving Visual Studio Code. The VS Code extension can be found on the [marketplace]().
+
+## Features
+* **Speed**: Quickly create and execute scripts.
+* **Debugging**: Attach a Python debugger at any time.
+* **Compatibility**: IDACode does not require you to modify your scripts in a specific way. All scripts can be executed from within IDA without changes.
+* **Modularity**: Since the 
+
+IDACode only supports Python 3. If there's a need for Python 2 compatibility please vote [here](https://github.com/ioncodes/idacode/issues/3).
+
+## Setup
+To set up the dependencies for the IDA plugin run:
+
+```sh
+# make sure to use the correct Python version
+python3 -m pip install --user debugpy tornado
+```
+
+Either clone this repository or download a release package from [here](https://github.com/ioncodes/idacode/releases). `ida.zip` reflects the contents of the `ida` folder in this repository. Copy all files into IDAs plugin directory.  
+
+The next step is to configure your settings to match your environment. Edit `idacode_utils/settings.py` accordingly:
+
+* `HOST`: This is the host address. This is always `127.0.0.1` unless you want it to be accessible from a remote location. **Keep in mind that this plugin does not make use of authentication.**
+* `PORT`: This is the port you want IDA to listen to. This is used for websocket communication between IDA and VS Code.
+* `DEBUG_PORT`: This is the port you want to listen on for incoming debug sessions.
+* `PYTHON`: This is the absolute path to the Python distribution that your IDA setup uses.
+
+You can now start the plugin by clicking on `Start IDACode` in the plugins menu.  
+
+The VS Code extension is available on the [marketplace](). To configure the extension please refer to the extension's [README](https://github.com/ioncodes/idacode/tree/master/idacode#extension-settings).
+
+## Usage
+
+### IDA
+Hit `Start IDACode` in the plugin menu. You should be greeted with the following text:
+
+```
+IDACode listening on 127.0.0.1:7065
+```
+
+### VS Code
+There are 4 commands at your disposal:
+
+![commands](images/commands.png)
+
+Once you have a folder open that you want to put your scripts in you are ready to connect to IDA. You can do so by either executing `Connect to IDA` or `Connect and attach a debugger to IDA`. Please keep in mind that a debug session is permanent until you restart IDA. You can not change the workspace folder once the debbuger has started.  
+Ensure that the workspace folder is the folder that your main scripts is located.  
+Once you are connected you are able to select `Execute script in IDA`.
+
+## Debugging
+IDACode uses VS Code's remote debugger to connect to IDA. All VS Code features are supported however, you have to specify the scripts entrypoint by using Python 3 builtin functionality: `breakpoint`. This instruction tells the debugger to pause execution, if there's no debugger present it will just ignore the function. When executing `breakpoint` in IDA, IDACode gives you additional features such as logging and conditionals which are not present in the normal builtin function. Here's an example:
+
+```py
+name = idc.get_segm_name(segment)
+breakpoint(name==".text", f"found {name} at {segment}")
+```
+
+## Demo
+![demo](idacode/images/preview.gif)
