@@ -23,6 +23,14 @@ IDACode requires the following settings to be set in order to function correctly
 * `IDACode.port`: the port IDA is listening on
 * `IDACode.debug.port`: the debug port the IDAPython debugger is listening on
 
+## Autocomplete
+
+To enable autocomplete for your scripts create a file called `.env` and extend your existing `PYTHONPATH` environment variable with the path to your IDAPython modules. An example `.env` could be:
+
+```
+PYTHONPATH=%PYTHONPATH%;C:\Program Files\IDA 7.4\python\3
+```
+
 ## Known Issues
 
 IDACode doesn't support host to VM communication unless the VM uses a shared volume that matches the workspace path set in VS Code when connecting to IDA.
