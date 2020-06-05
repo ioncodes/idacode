@@ -36,9 +36,12 @@ class IDACode(idaapi.plugin_t):
         return idaapi.PLUGIN_OK
 
     def run(self, args):
-        thread = threading.Thread(target=start_server)
-        thread.daemon = True
-        thread.start()
+        if sys.version_info < (3, 3):
+            print("IDACode is only compatible with Python 3")
+        else:
+            thread = threading.Thread(target=start_server)
+            thread.daemon = True
+            thread.start()
 
     def term(self):
         pass
