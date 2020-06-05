@@ -32,5 +32,5 @@ IDACode doesn't support host to VM communication unless the VM uses a shared vol
 ### 0.1.0
 
 - Initial release
-- IDAPython remote execution
+- IDAPython execution
 - IDAPython debugger
