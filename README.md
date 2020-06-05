@@ -49,7 +49,7 @@ Ensure that the workspace folder is the folder that your main scripts is located
 Once you are connected you are able to select `Execute script in IDA`.
 
 ## Debugging
-IDACode uses VS Code's remote debugger to connect to IDA. All VS Code features are supported however, you have to specify the scripts entrypoint by using Python 3 builtin functionality: `breakpoint`. This instruction tells the debugger to pause execution, if there's no debugger present it will just ignore the function. When executing `breakpoint` in IDA, IDACode gives you additional features such as logging and conditionals which are not present in the normal builtin function. Here's an example:
+IDACode uses VS Code's remote debugger to connect to IDA. All VS Code features are supported. However, you have to specify the scripts entrypoint by using Python 3 builtin functionality: `breakpoint`. This instruction tells the debugger to pause execution, if there's no debugger present it will just ignore the function. When executing `breakpoint` in IDA, IDACode gives you additional features such as logging and conditionals which are not present in the normal builtin function. Here's an example:
 
 ```py
 name = idc.get_segm_name(segment)
