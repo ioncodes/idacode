@@ -1,84 +1,28 @@
-import socket
-import threading
-import inspect
-import sys
-import os
+import socket, sys, os, threading, inspect, asyncio
+import tornado, debugpy
 import idaapi
-import debugpy
-
 import idacode_utils.dbg as dbg
-
-"""
-TODO:
-* Implement event system
-  -> VS Code send enable to IDA with workspace 
-     path so debugger can launch accordingly
-"""
-
-HOST = "127.0.0.1"
-PORT = 7065
-DEBUG_PORT = 7066
-PYTHON = "C:\\Python37\\python37.exe"
-
-getcwd_original = os.getcwd
-script_folder = ""
-
-def getcwd_hook():
-    global script_folder
-
-    cwd = getcwd_original()
-    if cwd.lower() in script_folder.lower() and script_folder.lower() != cwd.lower():
-        cwd = script_folder
-    return cwd
+import idacode_utils.hooks as hooks
+import idacode_utils.settings as settings
+from idacode_utils.socket_handler import SocketHandler
 
 def setup_patches():
-    os.getcwd = getcwd_hook
-    sys.executable = PYTHON
+    hooks.install()
+    sys.executable = settings.PYTHON
 
-def start_debug_server():
-    debugpy.listen((HOST, DEBUG_PORT))
-    print(f"IDACode debug server listening on {HOST}:{DEBUG_PORT}")
-
-def start_socket_server():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind((HOST, PORT))
-    sock.listen(5)
-    print(f"IDACode listening on {HOST}:{PORT}")
-    return sock
-
-def create_env():
-    return {
-        "dbg": dbg,
-        "breakpoint": dbg.bp,
-        "idacode": True
-    }
-
-def handle_connection(script):
-    global script_folder
-    
-    if script and len(script) > 0:
-        script = script.decode("utf8")
-        script_folder = os.path.dirname(script)
-        env = create_env()
-        print(f"Executing {script}")
-        
-        idaapi.execute_sync(
-            lambda: idaapi.IDAPython_ExecScript(script, env),
-            idaapi.MFF_WRITE
-        )
+def create_socket_handler():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    app = tornado.web.Application([
+        (r"/ws", SocketHandler),
+    ])
+    server = tornado.httpserver.HTTPServer(app)
+    print(f"IDACode listening on {settings.HOST}:{settings.PORT}")
+    server.listen(address=settings.HOST, port=settings.PORT)
 
 def start_server():
     setup_patches()
-    sock = start_socket_server()
-    start_debug_server()
-
-    while True:
-        io, _ = sock.accept()
-        data = io.recv(256) # MAX_PATH
-        io.close()
-
-        handle_connection(data)
-
+    create_socket_handler()
+    tornado.ioloop.IOLoop.current().start()
 
 class IDACode(idaapi.plugin_t):
     def __init__(self):

@@ -1,30 +1,97 @@
 import * as vscode from 'vscode';
-import * as net from 'net';
 import * as path from 'path';
+import * as WebSocket from 'ws';
+import { Event } from './utils/events';
+import './utils/extensions';
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('idacode.executeScript', () => {
-        const scriptPath = vscode.window.activeTextEditor?.document.uri.fsPath as string;
-        const config = vscode.workspace.getConfiguration('IDACode');
-        const host = config.get('host') as string;
-        const port = config.get('port') as number;
+var socket: WebSocket;
 
-        if (scriptPath !== undefined) {
-            const name = path.parse(scriptPath).base;
-            const client = new net.Socket();
-            
-            client.on('error', _ => {
-                vscode.window.showErrorMessage(`Failed sending ${name} to IDA`);
+function getConfig<T>(name: string): T {
+    const config = vscode.workspace.getConfiguration('IDACode');
+    return config.get(name) as T;
+}
+
+function getCurrentDocument(): string {
+    return vscode.window.activeTextEditor?.document.uri.fsPath as string;
+}
+
+function executeScript() {
+    const currentDocument = getCurrentDocument();
+    const name = path.parse(currentDocument).base;
+    socket.send({
+        event: Event.ExecuteScript,
+        path: currentDocument
+    }.toBuffer());
+    vscode.window.showInformationMessage(`Sent ${name} to IDA`);
+}
+
+function connectToIDA() {
+    return new Promise((resolve, reject) => {
+        const host = getConfig<string>('host');
+        const port = getConfig<number>('port');
+
+        socket = new WebSocket(`ws://${host}:${port}/ws`);
+
+        socket.on('open', async () => {
+            const currentDocument = getCurrentDocument();
+            const currentFolder = path.parse(currentDocument).dir;
+            const workspaceFolder = await vscode.window.showInputBox({
+                prompt: 'Enter the path to the folder containing the script',
+                value: currentFolder
             });
+            socket.send({
+                event: Event.SetWorkspace,
+                path: workspaceFolder
+            }.toBuffer());
+            vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
+            resolve();
+        });
 
-            client.connect(port, host, () => {
-                client.write(scriptPath);
-                vscode.window.showInformationMessage(`Sent ${name} to IDA`);
-            });
-        }
+        socket.on('message', data => {
+            const message = JSON.parse(data.toString());
+
+            if(message.event === Event.DebuggerReady) {
+                const host = getConfig<string>('host');
+                const debugPort = getConfig<number>('debug.port');
+
+                vscode.debug.startDebugging(undefined, {
+                    name: 'Python: Remote Attach',
+                    type: 'python',
+                    request: 'attach',
+                    port: debugPort,
+                    host: host,
+                    pathMappings: [
+                        {
+                            localRoot: '${workspaceFolder}',
+                            remoteRoot: '.'
+                        }
+                    ]
+                });
+            }
+        });
     });
+}
 
-    context.subscriptions.push(disposable);
+function attachToIDA() {
+    socket.send({
+        event: Event.AttachDebugger
+    }.toBuffer());
+}
+
+function connectAndAttachToIDA() {
+    connectToIDA().then(attachToIDA);
+}
+
+export function activate(context: vscode.ExtensionContext) {    
+    let commands = [];
+    commands.push(vscode.commands.registerCommand('idacode.executeScript', executeScript));
+    commands.push(vscode.commands.registerCommand('idacode.connectToIDA', connectToIDA));
+    commands.push(vscode.commands.registerCommand('idacode.attachToIDA', attachToIDA));
+    commands.push(vscode.commands.registerCommand('idacode.connectAndAttachToIDA', connectAndAttachToIDA));
+    
+    for(let command of commands) {
+        context.subscriptions.push(command);
+    }
 }
 
 export function deactivate() {}
