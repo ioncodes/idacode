@@ -5,7 +5,7 @@ IDACode makes it easy to execute and debug Python 3 scripts in your IDA environm
 * **Speed**: Quickly create and execute scripts.
 * **Debugging**: Attach a Python debugger at any time.
 * **Compatibility**: IDACode does not require you to modify your scripts in a specific way. All scripts can be executed from within IDA without changes.
-* **Modularity**: Since the 
+* **Modularity**: IDACode does not make extensive use of safe wrappers for thread synchronization, this allows you to import any module from any path at any given time. Instead IDACode synchronizes the script execution thread with IDAs main thread to avoid performance and unexpected issues. 
 
 IDACode only supports Python 3. If there's a need for Python 2 compatibility please vote [here](https://github.com/ioncodes/idacode/issues/3).
 
