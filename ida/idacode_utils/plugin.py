@@ -30,6 +30,12 @@ def start_server():
     create_socket_handler()
     tornado.ioloop.IOLoop.current().start()
 
+def get_python_versions():
+    settings_version = subprocess.check_output([settings.PYTHON, "-c", "import sys; print(sys.version + sys.platform)"])
+    settings_version = settings_version.decode("utf-8", "ignore").strip()
+    ida_version = f"{sys.version}{sys.platform}"
+    return (settings_version, ida_version)
+
 class IDACode(idaapi.plugin_t):
     def __init__(self):
         self.flags = idaapi.PLUGIN_UNL
@@ -43,9 +49,7 @@ class IDACode(idaapi.plugin_t):
         if not initialized:
             initialized = True
             if os.path.isfile(settings.PYTHON):
-                settings_version = subprocess.check_output([settings.PYTHON, "-c", "import sys; print(sys.version + sys.platform)"])
-                settings_version = settings_version.decode("utf-8", "ignore").strip()
-                ida_version = sys.version + sys.platform
+                settings_version, ida_version = get_python_versions()
                 if settings_version != ida_version:
                     print("[IDACode] settings.PYTHON version mismatch, aborting load:")
                     print(f"[IDACode] IDA interpreter: {ida_version}")
