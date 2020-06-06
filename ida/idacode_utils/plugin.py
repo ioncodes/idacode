@@ -1,4 +1,4 @@
-import socket, sys, os, threading, inspect, asyncio
+import socket, sys, os, threading, inspect, asyncio, subprocess
 try:
     import tornado, debugpy
 except ImportError:
@@ -42,10 +42,8 @@ class IDACode(idaapi.plugin_t):
         global initialized
         if not initialized:
             initialized = True
-            import os.path
             if os.path.isfile(settings.PYTHON):
-                from subprocess import check_output
-                settings_version = check_output([settings.PYTHON, "-c", "import sys; print(sys.version + sys.platform)"])
+                settings_version = subprocess.check_output([settings.PYTHON, "-c", "import sys; print(sys.version + sys.platform)"])
                 settings_version = settings_version.decode("utf-8", "ignore").strip()
                 ida_version = sys.version + sys.platform
                 if settings_version != ida_version:
