@@ -42,3 +42,7 @@ IDACode doesn't support host to VM communication unless the VM uses a shared vol
 - Initial release
 - IDAPython execution
 - IDAPython debugger
+
+### 0.1.1
+
+- Added logging support

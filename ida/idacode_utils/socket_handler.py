@@ -1,5 +1,5 @@
 import tornado.websocket, debugpy
-import json
+import json, tempfile
 import idaapi
 import idacode_utils.dbg as dbg
 import idacode_utils.hooks as hooks
@@ -13,6 +13,10 @@ def create_env():
     }
 
 def start_debug_server():
+    if settings.LOGGING:
+        tmp_path = tempfile.gettempdir()
+        debugpy.log_to(tmp_path)
+        print(f"Logging to {tmp_path} with pattern debugpy.*.log")
     debugpy.listen((settings.HOST, settings.DEBUG_PORT))
     print(f"IDACode debug server listening on {settings.HOST}:{settings.DEBUG_PORT}")
 

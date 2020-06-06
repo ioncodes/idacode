@@ -1,5 +1,6 @@
 # IDACode
-IDACode makes it easy to execute and debug Python 3 scripts in your IDA environment without leaving Visual Studio Code. The VS Code extension can be found on the [marketplace]().
+IDACode makes it easy to execute and debug Python 3 scripts in your IDA environment without leaving Visual Studio Code. The VS Code extension can be found on the [marketplace]().  
+IDACode is still in a very early state and bugs are to be expected. Please open a new issue if you encounter any issues.
 
 ## Features
 * **Speed**: Quickly create and execute scripts.
@@ -25,6 +26,7 @@ The next step is to configure your settings to match your environment. Edit `ida
 * `PORT`: This is the port you want IDA to listen to. This is used for websocket communication between IDA and VS Code.
 * `DEBUG_PORT`: This is the port you want to listen on for incoming debug sessions.
 * `PYTHON`: This is the absolute path to the Python distribution that your IDA setup uses.
+* `LOGGING`: Determines whether the debugger should log into files. This is especially useful when you are running into issues with IDACode. Please submit a new issue if you find anything. The files are always located in your temp directory (e.g. Windows: `%TEMP%`). The files are called `debugpy.*.log`.
 
 You can now start the plugin by clicking on `Start IDACode` in the plugins menu.  
 
