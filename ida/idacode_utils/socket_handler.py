@@ -16,13 +16,13 @@ def start_debug_server():
     if settings.LOGGING:
         tmp_path = tempfile.gettempdir()
         debugpy.log_to(tmp_path)
-        print(f"Logging to {tmp_path} with pattern debugpy.*.log")
+        print(f"[IDACode] Logging to {tmp_path} with pattern debugpy.*.log")
     debugpy.listen((settings.HOST, settings.DEBUG_PORT))
-    print(f"IDACode debug server listening on {settings.HOST}:{settings.DEBUG_PORT}")
+    print(f"[IDACode] IDACode debug server listening on {settings.HOST}:{settings.DEBUG_PORT}")
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        print("IDACode client connected")
+        print("[IDACode] client connected")
 
     def on_message(self, message):
         message = json.loads(message.decode("utf8"))
@@ -30,7 +30,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         if message["event"] == "set_workspace":
             path = message["path"]
             hooks.set_script_folder(path)
-            print(f"Set workspace folder to {path}")
+            print(f"[IDACode] Set workspace folder to {path}")
         elif message["event"] == "attach_debugger":
             start_debug_server()
             self.write_message({
@@ -39,13 +39,13 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         elif message["event"] == "execute_script":
             script = message["path"]
             env = create_env()
-            print(f"Executing {script}")
+            print(f"[IDACode] Executing {script}")
             idaapi.execute_sync(
                 lambda: idaapi.IDAPython_ExecScript(script, env),
                 idaapi.MFF_WRITE
             )
         else:
-            print(f"Invalid event {message['event']}")
+            print(f"[IDACode] Invalid event {message['event']}")
 
     def on_close(self):
-        print("IDACode client disconnected")
+        print("[IDACode] client disconnected")
