@@ -56,5 +56,7 @@ name = idc.get_segm_name(segment)
 breakpoint(name==".text", f"found {name} at {segment}")
 ```
 
+Please also note that a `breakpoint()` call should never occur at the end of a file, it must always be before any other line of code as it breaks on the _next_ instruction in your code.
+
 ## Demo
 ![demo](idacode/images/preview.gif)
