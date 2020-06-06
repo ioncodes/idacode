@@ -35,7 +35,7 @@ The VS Code extension is available on the [marketplace](https://marketplace.visu
 ## Usage
 
 ### IDA
-Hit `Start IDACode` in the plugin menu. You should be greeted with the following text:
+Hit `IDACode` in the plugin menu. You should be greeted with the following text:
 
 ```
 IDACode listening on 127.0.0.1:7065
