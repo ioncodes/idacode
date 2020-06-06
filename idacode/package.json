@@ -38,19 +38,19 @@
         "commands": [
             {
                 "command": "idacode.connectToIDA",
-                "title": "Connect to IDA"
+                "title": "IDACode: Connect to IDA"
             },
             {
                 "command": "idacode.attachToIDA",
-                "title": "Attach a debugger to IDA"
+                "title": "IDACode: Attach a debugger to IDA"
             },
             {
                 "command": "idacode.connectAndAttachToIDA",
-                "title": "Connect and attach a debugger to IDA"
+                "title": "IDACode: Connect and attach a debugger to IDA"
             },
             {
                 "command": "idacode.executeScript",
-                "title": "Execute script in IDA"
+                "title": "IDACode: Execute script in IDA"
             }
         ],
         "configuration": {
