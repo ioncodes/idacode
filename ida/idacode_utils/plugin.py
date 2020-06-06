@@ -10,6 +10,7 @@ import idacode_utils.hooks as hooks
 import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
+VERSION = "0.1.2"
 initialized = False
 
 def setup_patches():
@@ -59,6 +60,7 @@ class IDACode(idaapi.plugin_t):
                 print(f"[IDACode] settings.PYTHON ({settings.PYTHON}) does not exist, aborting load")
                 print("[IDACode] To fix this issue, modify idacode_utils/settings.py to point to the python executable")
                 return idaapi.PLUGIN_SKIP
+            print(f"[IDACode] Plugin version {VERSION}")
             print("[IDACode] Plugin loaded, use Edit -> Plugins -> IDACode to start the server")
         return idaapi.PLUGIN_OK
 

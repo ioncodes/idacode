@@ -46,3 +46,8 @@ IDACode doesn't support host to VM communication unless the VM uses a shared vol
 ### 0.1.1
 
 - Added logging support
+
+### 0.1.2
+
+- Enhanced UX
+- Added configuration checks
