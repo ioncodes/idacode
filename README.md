@@ -1,5 +1,5 @@
 # IDACode
-IDACode makes it easy to execute and debug Python 3 scripts in your IDA environment without leaving Visual Studio Code. The VS Code extension can be found on the [marketplace]().  
+IDACode makes it easy to execute and debug Python 3 scripts in your IDA environment without leaving Visual Studio Code. The VS Code extension can be found on the [marketplace](https://marketplace.visualstudio.com/items?itemName=Layle.idacode).  
 IDACode is still in a very early state and bugs are to be expected. Please open a new issue if you encounter any issues.
 
 ## Features
@@ -30,7 +30,7 @@ The next step is to configure your settings to match your environment. Edit `ida
 
 You can now start the plugin by clicking on `Start IDACode` in the plugins menu.  
 
-The VS Code extension is available on the [marketplace](). To configure the extension please refer to the extension's [README](https://github.com/ioncodes/idacode/tree/master/idacode#extension-settings).
+The VS Code extension is available on the [marketplace](https://marketplace.visualstudio.com/items?itemName=Layle.idacode). To configure the extension please refer to the extension's [README](https://github.com/ioncodes/idacode/tree/master/idacode#extension-settings).
 
 ## Usage
 
