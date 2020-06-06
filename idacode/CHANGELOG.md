@@ -9,3 +9,8 @@
 ## 0.1.1
 
 - Added logging support
+
+### 0.1.2
+
+- Enhanced UX
+- Added configuration checks

@@ -63,3 +63,6 @@ It is also important that attaching a debugger will create a new debugger instan
 
 ## Demo
 ![demo](idacode/images/preview.gif)
+
+## Contributors
+* [mrexodia](https://github.com/mrexodia)
