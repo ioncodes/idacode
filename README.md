@@ -28,7 +28,7 @@ The next step is to configure your settings to match your environment. Edit `ida
 * `PYTHON`: This is the absolute path to the Python distribution that your IDA setup uses.
 * `LOGGING`: Determines whether the debugger should log into files. This is especially useful when you are running into issues with IDACode. Please submit a new issue if you find anything. The files are always located in your temp directory (e.g. Windows: `%TEMP%`). The files are called `debugpy.*.log`.
 
-You can now start the plugin by clicking on `Start IDACode` in the plugins menu.  
+You can now start the plugin by clicking on `IDACode` in the plugins menu.  
 
 The VS Code extension is available on the [marketplace](https://marketplace.visualstudio.com/items?itemName=Layle.idacode). To configure the extension please refer to the extension's [README](https://github.com/ioncodes/idacode/tree/master/idacode#extension-settings).
 
