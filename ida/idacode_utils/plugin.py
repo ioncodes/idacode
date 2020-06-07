@@ -23,7 +23,7 @@ def create_socket_handler():
         (r"/ws", SocketHandler),
     ])
     server = tornado.httpserver.HTTPServer(app)
-    print(f"[IDACode] listening on {settings.HOST}:{settings.PORT}")
+    print(f"[IDACode] Listening on {settings.HOST}:{settings.PORT}")
     server.listen(address=settings.HOST, port=settings.PORT)
 
 def start_server():
