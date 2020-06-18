@@ -14,5 +14,5 @@ def bp(*args):
             break
     if condition:
         if message:
-            print(f"[IDACode] {message}")
+            print("[IDACode] {message}".format(message=message))
         api.breakpoint()
