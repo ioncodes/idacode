@@ -14,3 +14,7 @@
 
 - Enhanced UX
 - Added configuration checks
+
+### 0.1.3
+
+- Added support for Python 2
