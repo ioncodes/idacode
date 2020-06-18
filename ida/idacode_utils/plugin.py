@@ -2,7 +2,7 @@ import socket, sys, os, threading, inspect, subprocess
 try:
     import tornado, debugpy
 except ImportError:
-    print("[IDACode] Dependencies missing, run: python3 -m pip install --user debugpy tornado")
+    print("[IDACode] Dependencies missing, run: python -m pip install --user debugpy tornado")
     sys.exit()
 import idaapi
 import idacode_utils.dbg as dbg
@@ -10,7 +10,7 @@ import idacode_utils.hooks as hooks
 import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 initialized = False
 
 def setup_patches():
