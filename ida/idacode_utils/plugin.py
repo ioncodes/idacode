@@ -1,4 +1,4 @@
-import socket, sys, os, threading, inspect, asyncio, subprocess
+import socket, sys, os, threading, inspect, subprocess
 try:
     import tornado, debugpy
 except ImportError:
@@ -18,7 +18,9 @@ def setup_patches():
     sys.executable = settings.PYTHON
 
 def create_socket_handler():
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    if sys.version_info >= (3, 4):
+        import asyncio
+        asyncio.set_event_loop(asyncio.new_event_loop())
     app = tornado.web.Application([
         (r"/ws", SocketHandler),
     ])
