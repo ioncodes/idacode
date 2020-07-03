@@ -16,6 +16,11 @@ function getCurrentDocument(): string {
 }
 
 function executeScript() {
+    if (getConfig<boolean>('saveOnExecute'))
+    {
+        vscode.workspace.saveAll().then();   
+    }
+
     const currentDocument = getCurrentDocument();
     const name = path.parse(currentDocument).base;
     socket.send({
