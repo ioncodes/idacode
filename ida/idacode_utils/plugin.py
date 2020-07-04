@@ -10,7 +10,7 @@ import idacode_utils.hooks as hooks
 import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 initialized = False
 
 def setup_patches():
