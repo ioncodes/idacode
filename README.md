@@ -67,3 +67,4 @@ It is also important that attaching a debugger will create a new debugger instan
 ## Contributors
 * [mrexodia](https://github.com/mrexodia)
 * [MeitarR](https://github.com/MeitarR)
+* [Plutoberth](https://github.com/Plutoberth)
