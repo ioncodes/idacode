@@ -15,12 +15,7 @@ function getCurrentDocument(): string {
     return vscode.window.activeTextEditor?.document.uri.fsPath as string;
 }
 
-function executeScript() {
-    if (getConfig<boolean>('saveOnExecute'))
-    {
-        vscode.workspace.saveAll().then();   
-    }
-
+function executeScriptInIDA() {
     const currentDocument = getCurrentDocument();
     const name = path.parse(currentDocument).base;
     socket.send({
@@ -28,6 +23,14 @@ function executeScript() {
         path: currentDocument
     }.toBuffer());
     vscode.window.showInformationMessage(`Sent ${name} to IDA`);
+}
+
+function executeScript() {
+    if (getConfig<boolean>('saveOnExecute')) {
+        vscode.workspace.saveAll().then(executeScriptInIDA);
+    } else {
+        executeScriptInIDA();
+    }
 }
 
 function connectToIDA() {
