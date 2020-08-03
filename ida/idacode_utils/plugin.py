@@ -10,6 +10,9 @@ import idacode_utils.hooks as hooks
 import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
+# Fix for https://github.com/tornadoweb/tornado/issues/2608
+import asyncio
+
 VERSION = "0.1.4"
 initialized = False
 
@@ -29,6 +32,10 @@ def create_socket_handler():
     server.listen(address=settings.HOST, port=settings.PORT)
 
 def start_server():
+    # Fix for https://github.com/tornadoweb/tornado/issues/2608
+	if sys.platform=='win32':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    
     setup_patches()
     create_socket_handler()
     tornado.ioloop.IOLoop.current().start()
