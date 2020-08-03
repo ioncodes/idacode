@@ -33,7 +33,7 @@ def create_socket_handler():
 
 def start_server():
     # Fix for https://github.com/tornadoweb/tornado/issues/2608
-	if sys.platform=='win32':
+	if sys.platform=='win32' and sys.version_info >= (3,8):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     
     setup_patches()
