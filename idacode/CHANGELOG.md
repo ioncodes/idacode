@@ -26,8 +26,8 @@
 ### 0.2.0
 
 - Added "Execute on save" support in settings
-- Fixes Python 3.8 support on Windows (#13)
-- Introduces `__name__` inside of the script environment as `__main__` (#14)
+- Fixes Python 3.8 support on Windows (PR #13)
+- Introduces `__name__` inside of the script environment as `__main__` (Issue #14)
 
 ### 0.2.2
 
