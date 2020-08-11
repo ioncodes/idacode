@@ -3,7 +3,7 @@
     "displayName": "IDACode",
     "description": "Run and debug your IDA scripts from VS Code",
     "icon": "images/icon.png",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "publisher": "Layle",
     "license": "SEE LICENSE IN LICENSE.md",
     "preview": true,
