@@ -9,7 +9,8 @@ def create_env():
     return {
         "dbg": dbg,
         "breakpoint": dbg.bp,
-        "idacode": True
+        "idacode": True,
+        "__name__": "__main__"
     }
 
 def start_debug_server():
