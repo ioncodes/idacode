@@ -3,7 +3,7 @@
     "displayName": "IDACode",
     "description": "Run and debug your IDA scripts from VS Code",
     "icon": "images/icon.png",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "publisher": "Layle",
     "license": "SEE LICENSE IN LICENSE.md",
     "preview": true,
@@ -76,6 +76,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Save all open editors when executing."
+                },
+                "IDACode.executeOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Execute script on save."
                 }
             }
         }

@@ -42,6 +42,8 @@ IDACode listening on 127.0.0.1:7065
 ```
 
 ### VS Code
+As of version 0.2.0 IDACode supports "Execute on save" which is enabled by default. VS Code will automatically execute your script in IDA as soon as you save the current document (for example with CTRL+S). This behavior can be disabled in the settings.  
+
 There are 4 commands at your disposal:
 
 ![commands](images/commands.png)
@@ -68,3 +70,4 @@ It is also important that attaching a debugger will create a new debugger instan
 * [mrexodia](https://github.com/mrexodia)
 * [MeitarR](https://github.com/MeitarR)
 * [Plutoberth](https://github.com/Plutoberth)
+* [OevreFlataeker](https://github.com/OevreFlataeker)

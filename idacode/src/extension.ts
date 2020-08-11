@@ -88,7 +88,7 @@ function attachToIDA() {
 
 function connectAndAttachToIDA() {
     connectToIDA().then(attachToIDA);
-}
+} 
 
 export function activate(context: vscode.ExtensionContext) {    
     let commands = [];
@@ -100,6 +100,12 @@ export function activate(context: vscode.ExtensionContext) {
     for(let command of commands) {
         context.subscriptions.push(command);
     }
+
+    vscode.workspace.onDidSaveTextDocument(() => {
+        if (getConfig<boolean>('executeOnSave')) {
+            executeScript();
+        }
+    });
 }
 
 export function deactivate() {}

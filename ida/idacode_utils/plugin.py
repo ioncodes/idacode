@@ -13,7 +13,7 @@ from idacode_utils.socket_handler import SocketHandler
 # Fix for https://github.com/tornadoweb/tornado/issues/2608
 import asyncio
 
-VERSION = "0.1.4"
+VERSION = "0.2.0"
 initialized = False
 
 def setup_patches():
