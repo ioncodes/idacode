@@ -11,7 +11,8 @@ import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
 # Fix for https://github.com/tornadoweb/tornado/issues/2608
-import asyncio
+if sys.version_info >= (3, 4):
+    import asyncio
 
 VERSION = "0.2.2"
 initialized = False
@@ -22,7 +23,6 @@ def setup_patches():
 
 def create_socket_handler():
     if sys.version_info >= (3, 4):
-        import asyncio
         asyncio.set_event_loop(asyncio.new_event_loop())
     app = tornado.web.Application([
         (r"/ws", SocketHandler),
