@@ -8,8 +8,7 @@ import idacode_utils.settings as settings
 def create_env():
     return {
         "dbg": dbg,
-        "breakpoint": dbg.bp,
-        "idacode": True,
+        "__idacode__": True,
         "__name__": "__main__"
     }
 
@@ -18,6 +17,7 @@ def start_debug_server():
         tmp_path = tempfile.gettempdir()
         debugpy.log_to(tmp_path)
         print("[IDACode] Logging to {} with pattern debugpy.*.log".format(tmp_path))
+    debugpy.configure({ "python": settings.PYTHON })
     debugpy.listen((settings.HOST, settings.DEBUG_PORT))
     print("[IDACode] IDACode debug server listening on {address}:{port}".format(address=settings.HOST, port=settings.DEBUG_PORT))
 

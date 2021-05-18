@@ -14,12 +14,12 @@ from idacode_utils.socket_handler import SocketHandler
 if sys.version_info >= (3, 4):
     import asyncio
 
-VERSION = "0.2.2"
+VERSION = "0.3.0"
 initialized = False
 
 def setup_patches():
     hooks.install()
-    sys.executable = settings.PYTHON
+    #sys.executable = settings.PYTHON
 
 def create_socket_handler():
     if sys.version_info >= (3, 4):

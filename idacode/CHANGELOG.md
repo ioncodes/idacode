@@ -22,7 +22,7 @@
 ### 0.1.4
 
 - Added "Save on execute" support in settings
-
+ 
 ### 0.2.0
 
 - Added "Execute on save" support in settings
@@ -32,3 +32,8 @@
 ### 0.2.2
 
 - Updated README
+
+### 0.3.0
+
+- Fixed Python 2 support (PR #17)
+- Fixed issue where debugpy would attempt to spawn the current process (Issue #23)

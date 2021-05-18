@@ -6,7 +6,8 @@ IDACode is still in a very early state and bugs are to be expected. Please open 
 * **Speed**: Quickly create and execute scripts.
 * **Debugging**: Attach a Python debugger at any time.
 * **Compatibility**: IDACode does not require you to modify your scripts in a specific way. All scripts can be executed from within IDA without changes.
-* **Modularity**: IDACode does not make extensive use of safe wrappers for thread synchronization, this allows you to import any module from any path at any given time. Instead IDACode synchronizes the script execution thread with IDAs main thread to avoid performance and unexpected issues. 
+* **Modularity**: IDACode does not make extensive use of safe wrappers for thread synchronization, this allows you to import any module from any path at any given time. Instead IDACode synchronizes the script execution thread with IDAs main thread to avoid performance and unexpected issues.
+* **Syncing**: As IDACode uses `debugpy` for communication, it syncs the output window naturally with VS Code's output panel.
 
 IDACode supports both Python 2 and Python 3!
 
@@ -15,7 +16,8 @@ To set up the dependencies for the IDA plugin run:
 
 ```sh
 # make sure to use the correct Python version
-python -m pip install --user debugpy tornado
+# it seems that there's an issue with the latest debugpy version (issue #19)
+python -m pip install --user debugpy===1.0.0rc2 tornado
 ```
 
 Either clone this repository or download a release package from [here](https://github.com/ioncodes/idacode/releases). `ida.zip` reflects the contents of the `ida` folder in this repository. Copy all files into IDAs plugin directory.  
@@ -53,14 +55,14 @@ Ensure that the workspace folder is the folder that your main scripts are locate
 Once you are connected you are able to select `Execute script in IDA`.
 
 ## Debugging
-IDACode uses VS Code's remote debugger to connect to IDA. All VS Code features are supported. However, you have to specify the scripts entrypoint by using Python builtin functionality: `breakpoint`. This instruction tells the debugger to pause execution, if there's no debugger present it will just ignore the function. When executing `breakpoint` in IDA, IDACode gives you additional features such as logging and conditionals which are not present in the normal builtin function. Here's an example:
+IDACode uses VS Code's remote debugger to connect to IDA. All VS Code features are supported. However, you have to specify the scripts entrypoint by using Python builtin functionality: `breakpoint`. This instruction tells the debugger to pause execution, if there's no debugger present it will just ignore the function. IDACode imports a helper package called `dbg` which implements an overload of `breakpoint` called `bp`. This function supports logging and conditionals:  
 
 ```py
 name = idc.get_segm_name(segment)
-breakpoint(name==".text", f"found {name} at {segment}")
+dbg.bp(name==".text", f"found {name} at {segment}")
 ```
 
-Please also note that a `breakpoint()` call should never occur at the end of a file, it must always be before any other line of code as it breaks on the _next_ instruction in your code.  
+Please also note that a `breakpoint()` call should never occur at the end of a file, it must always be before any other line of code as it breaks on the _next_ instruction in your code. Also note that if you decide to use the `dbg` package you must either remove all references or use the variable `__idacode__` as conditional before executing it as a normal IDA script.  
 It is also important that attaching a debugger will create a new debugger instance. In most cases this is not what you want. If you disconnect from the debugger use VS Code's remote debugger to connect back.
 
 ## Demo
@@ -71,3 +73,4 @@ It is also important that attaching a debugger will create a new debugger instan
 * [MeitarR](https://github.com/MeitarR)
 * [Plutoberth](https://github.com/Plutoberth)
 * [OevreFlataeker](https://github.com/OevreFlataeker)
+* [RolfRolles](https://github.com/RolfRolles)
