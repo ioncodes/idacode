@@ -16,9 +16,8 @@ To set up the dependencies for the IDA plugin run:
 
 ```sh
 # make sure to use the correct Python version
-# it seems that there's an issue with the latest debugpy version (issue #19)
-# if this version of debugpy does not work for you try to upgrade to latest
-python -m pip install --user debugpy===1.0.0rc2 tornado
+# IDACode supports the latest debugpy as of version 3.0.0, make sure to upgrade!
+python -m pip install --user debugpy tornado
 ```
 
 Either clone this repository or download a release package from [here](https://github.com/ioncodes/idacode/releases). `ida.zip` reflects the contents of the `ida` folder in this repository. Copy all files into IDAs plugin directory.  
