@@ -50,7 +50,7 @@ There are 4 commands at your disposal:
 
 ![commands](images/commands.png)
 
-Once you have a folder open that you want to put your scripts in you are ready to connect to IDA. You can do so by either executing `Connect to IDA` or `Connect and attach a debugger to IDA`. Please keep in mind that a debug session is permanent until you restart IDA. You can not change the workspace folder once the debugger has started.  
+Once you have a folder open that you want to put your scripts in (you **must** specify the folder when VS Code asks you to!) you are ready to connect to IDA. You can do so by either executing `Connect to IDA` or `Connect and attach a debugger to IDA`. Please keep in mind that a debug session is permanent until you restart IDA. You can not change the workspace folder once the debugger has started.  
 Ensure that the workspace folder is the folder that your main scripts are located in.  
 Once you are connected you are able to select `Execute script in IDA`.
 
