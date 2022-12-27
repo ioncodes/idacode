@@ -65,6 +65,9 @@ dbg.bp(name==".text", f"found {name} at {segment}")
 Please also note that a `breakpoint()` call should never occur at the end of a file, it must always be before any other line of code as it breaks on the _next_ instruction in your code. Also note that if you decide to use the `dbg` package you must either remove all references or use the variable `__idacode__` as conditional before executing it as a normal IDA script.  
 It is also important that attaching a debugger will create a new debugger instance. In most cases this is not what you want. If you disconnect from the debugger use VS Code's remote debugger to connect back.
 
+## Known Issues
+* Imported module doesn't reload after changes, refer to [this](https://github.com/ioncodes/idacode/issues/36) for a work around.
+
 ## Demo
 ![demo](idacode/images/preview.gif)
 
