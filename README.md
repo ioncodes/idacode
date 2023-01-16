@@ -44,7 +44,7 @@ IDACode listening on 127.0.0.1:7065
 ```
 
 ### VS Code
-As of version 0.2.0 IDACode supports "Execute on save" which is enabled by default. VS Code will automatically execute your script in IDA as soon as you save the current document (for example with CTRL+S). This behavior can be disabled in the settings.  
+As of version 0.2.0 IDACode supports "Execute on save" which is enabled by default. VS Code will automatically execute your script in IDA as soon as you save the current document (for example with CTRL+S). This behavior can be disabled in the settings. Open the VS Code Extension Development Console using Ctrl-Shift-P and enter "idacode" to see the list of commands below. Don't use the "Run" or "Debug" Functionality of VS Code, as you will get an "HTTP misformed" message in IDA instead.
 
 There are 4 commands at your disposal:
 
