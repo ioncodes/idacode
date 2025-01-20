@@ -1,13 +1,13 @@
 import socket, sys, os, threading, inspect, subprocess
+import idacode_utils.settings as settings
 try:
     import tornado, debugpy
 except ImportError:
-    print("[IDACode] Dependencies missing, run: python -m pip install --user debugpy tornado")
+    print("[IDACode] Dependencies missing, run:\n  \"{}\" -m pip install --user debugpy tornado".format(settings.PYTHON))
     sys.exit()
 import idaapi
 import idacode_utils.dbg as dbg
 import idacode_utils.hooks as hooks
-import idacode_utils.settings as settings
 from idacode_utils.socket_handler import SocketHandler
 
 # Fix for https://github.com/tornadoweb/tornado/issues/2608
@@ -35,7 +35,7 @@ def start_server():
     # Fix for https://github.com/tornadoweb/tornado/issues/2608
     if sys.platform=='win32' and sys.version_info >= (3,8):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
+
     setup_patches()
     create_socket_handler()
     tornado.ioloop.IOLoop.current().start()
