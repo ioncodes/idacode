@@ -9,7 +9,7 @@ IDACode is still in a very early state and bugs are to be expected. Please open 
 * **Modularity**: IDACode does not make extensive use of safe wrappers for thread synchronization, this allows you to import any module from any path at any given time. Instead IDACode synchronizes the script execution thread with IDAs main thread to avoid performance and unexpected issues.
 * **Syncing**: As IDACode uses `debugpy` for communication, it syncs the output window naturally with VS Code's output panel.
 
-IDACode supports both Python 2 and Python 3!
+IDACode has been tested on Windows and macos with IDA 8.4/9.0 and Python 3.12 (older python versions have issues with debugging).
 
 ## Setup
 To set up the dependencies for the IDA plugin run:
@@ -22,12 +22,11 @@ python -m pip install --user debugpy tornado
 
 Either clone this repository or download a release package from [here](https://github.com/ioncodes/idacode/releases). `ida.zip` reflects the contents of the `ida` folder in this repository. Copy all files into IDAs plugin directory.  
 
-The next step is to configure your settings to match your environment. Edit `idacode_utils/settings.py` accordingly:
+The next step is to configure your settings to match your environment (optional). Edit `idacode_utils/settings.py` accordingly:
 
 * `HOST`: This is the host address. This is always `127.0.0.1` unless you want it to be accessible from a remote location. **Keep in mind that this plugin does not make use of authentication.**
 * `PORT`: This is the port you want IDA to listen to. This is used for websocket communication between IDA and VS Code.
 * `DEBUG_PORT`: This is the port you want to listen on for incoming debug sessions.
-* `PYTHON`: This is the absolute path to the Python distribution that your IDA setup uses.
 * `LOGGING`: Determines whether the debugger should log into files. This is especially useful when you are running into issues with IDACode. Please submit a new issue if you find anything. The files are always located in your temp directory (e.g. Windows: `%TEMP%`). The files are called `debugpy.*.log`.
 
 You can now start the plugin by clicking on `IDACode` in the plugins menu.  

@@ -4,12 +4,10 @@ script_folder = ""
 getcwd_original = os.getcwd
 
 def getcwd_hook():
-    global script_folder
-
-    cwd = getcwd_original()
-    if cwd.lower() in script_folder.lower() and script_folder.lower() != cwd.lower():
-        cwd = script_folder
-    return cwd
+    # NOTE: We return the script folder here, otherwise breakpoints fail in VSCode
+    if script_folder:
+        return script_folder
+    return getcwd_original()
 
 def set_script_folder(folder):
     global script_folder
