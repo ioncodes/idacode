@@ -1,6 +1,8 @@
 HOST = "127.0.0.1"
 PORT = 7065
 DEBUG_PORT = 7066
+ALLOW_UNSAFE_ORIGIN = False
+LOGGING = True
 
 # Heuristically detect the python executable path
 PYTHON = ""
@@ -26,5 +28,3 @@ for path in sys.path:
             break
 if len(PYTHON) == 0 or not os.path.exists(PYTHON):
     raise FileNotFoundError("[IDACode] Could not find python executable, report an issue!")
-
-LOGGING = True

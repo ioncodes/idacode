@@ -36,6 +36,10 @@ def start_debug_server():
     print("[IDACode] Started debugpy server on {}:{}".format(debugpy_host, debugpy_port))
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        # NOTE: This is called when connecting from a browser
+        return settings.ALLOW_UNSAFE_ORIGIN
+
     def open(self):
         print("[IDACode] Client connected")
 
