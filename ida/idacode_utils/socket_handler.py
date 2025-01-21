@@ -44,8 +44,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         print("[IDACode] Client connected")
 
     def on_message(self, message):
-        message = json.loads(message.decode("utf8"))
-        
+        if not isinstance(message, str):
+            message = message.decode("utf-8")
+        message = json.loads(message)
+
         if message["event"] == "set_workspace":
             path = message["path"]
             hooks.set_script_folder(path)
