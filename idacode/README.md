@@ -74,3 +74,7 @@ IDACode doesn't support host to VM communication unless the VM uses a shared vol
 
 - Fixed Python 2 support (PR #17)
 - Fixed issue where debugpy would attempt to spawn the current process (Issue #23)
+
+### 0.3.1
+
+- Fixed unnecessary global prototype pollution that broke other extensions (eg GitHub Copilot)
