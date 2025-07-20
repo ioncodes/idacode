@@ -15,13 +15,17 @@ function getCurrentDocument(): string {
     return vscode.window.activeTextEditor?.document.uri.fsPath as string;
 }
 
+function toBuffer(obj: Object): Buffer {
+    return Buffer.from(JSON.stringify(obj));
+}
+
 function executeScriptInIDA() {
     const currentDocument = getCurrentDocument();
     const name = path.parse(currentDocument).base;
-    socket.send({
+    socket.send(toBuffer({
         event: Event.ExecuteScript,
         path: currentDocument
-    }.toBuffer());
+    }));
     vscode.window.showInformationMessage(`Sent ${name} to IDA`);
 }
 
@@ -47,10 +51,10 @@ function connectToIDA() {
                 prompt: 'Enter the path to the folder containing the script',
                 value: currentFolder
             });
-            socket.send({
+            socket.send(toBuffer({
                 event: Event.SetWorkspace,
                 path: workspaceFolder
-            }.toBuffer());
+            }));
             vscode.window.showInformationMessage(`Set workspace folder to ${workspaceFolder}`);
             resolve();
         });
@@ -81,9 +85,9 @@ function connectToIDA() {
 }
 
 function attachToIDA() {
-    socket.send({
+    socket.send(toBuffer({
         event: Event.AttachDebugger
-    }.toBuffer());
+    }));
 }
 
 function connectAndAttachToIDA() {
