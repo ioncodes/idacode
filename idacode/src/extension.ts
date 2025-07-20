@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as WebSocket from 'ws';
 import { Event } from './utils/events';
-import './utils/extensions';
 
 var socket: WebSocket;
 
