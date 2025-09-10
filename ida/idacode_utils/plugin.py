@@ -12,8 +12,11 @@ from idacode_utils.socket_handler import SocketHandler
 major, minor = map(int, idaapi.get_kernel_version().split("."))
 using_ida7api = (major > 6)
 using_pyqt5 = using_ida7api or (major == 6 and minor >= 9)
+using_pyside6 = (major > 9) or (major == 9 and minor >= 2)
 
-if using_pyqt5:
+if using_pyside6:
+    import PySide6.QtWidgets as QtWidgets
+elif using_pyqt5:
     import PyQt5.QtWidgets as QtWidgets
 else:
     import PySide.QtGui as QtGui
