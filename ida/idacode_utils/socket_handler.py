@@ -29,7 +29,13 @@ def start_debug_server():
     # Start debugpy server
     if settings.LOGGING:
         tmp_path = tempfile.gettempdir()
-        debugpy.log_to(tmp_path)
+        try:
+            debugpy.log_to(tmp_path)
+        except RuntimeError as e:
+            if "logging has already begun" in str(e):
+                pass
+            else:
+                raise
         print("[IDACode] Logging to {} with pattern debugpy.*.log".format(tmp_path))
     debugpy.configure(python=settings.PYTHON)
     debugpy_host, debugpy_port = debugpy.listen((settings.HOST, settings.DEBUG_PORT))
